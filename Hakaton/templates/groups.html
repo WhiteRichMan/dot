@@ -1,0 +1,79 @@
+{% extends "base.html" %}
+{% block content %}
+
+{# вывод группы одного юзера #}
+<td>{{ user.username }}</td>
+    {% for group in user.groups.all %}
+{{ group.name }}
+{% endfor %}
+{#вывод всех групп #}
+    {% for group in groups_list.all %}
+{{ group.name }}
+{% endfor %}
+
+
+
+<div class="row">
+
+    <div class="col-4">
+      <h1>{{group.name}}</h1>
+    </div>
+    <div class="col-6">
+      <p>{{group.description}}</p>
+    </div>
+    
+    
+    {% if user in group.members.all %}
+    <div class="col-2">
+      <a href="javascript:{document.getElementById('leave').submit()}"><button class="btn btn-primary btn-lg btn-block"> Leave {{product.members.count}}</button></a>
+    </div>
+    {% else %}
+      <div class="col-2">
+        <a href="javascript:{document.getElementById('join').submit()}"><button class="btn btn-primary btn-lg btn-block"> Join {{product.members.count}}</button></a>
+      </div>
+    {% endif %}
+    
+    </div>
+    
+    <div class="row">
+     <div class="col-4">
+      <img src="{{group.image.url}}" alt="">
+     </div>
+    </div>
+    <br>
+    <br>
+        <div class="row bootstrap snippets">
+          <div class="col-md-3 container-widget">
+              <div class="panel panel-info panel-widget">
+               <div class="panel-title text-center">
+                 Group Members
+               </div>
+               <div class="panel-body">
+                 {% for member in group.members.all %}
+                   <ul class="basic-list image-list">
+                     <li><b>{{member.username}}</li>
+                   </ul>
+                 {% endfor %}
+               </div>
+           </div>
+       </div>
+     </div>
+    
+    
+    
+      <form method ='POST' id= 'leave' action="{% url 'groups:leave' group.id %}" >
+       {% csrf_token %}
+       <input type="hidden" >
+     </form>
+    
+    
+     <form method ='POST' id= 'join' action="{% url 'groups:join' group.id %}" >
+       {% csrf_token %}
+       <input type="hidden" >
+     </form>
+    
+    
+    
+ 
+
+{% endblock %}
